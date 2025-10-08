@@ -1,6 +1,7 @@
-from consts import ROOMS
-from player_actions import get_input, move_player
-from utils import *
+from .consts import ROOMS, SPESIAL_ITEMS, ITEMS
+from .player_actions import get_input, move_player, take_item
+from .utils import *
+
 
 game_state = {
     'player_inventory': [],     # Инвентарь игрока
@@ -13,13 +14,41 @@ game_state = {
 def process_command(game_state: dict, cmd: str):
     tokenized = cmd.split()
     match tokenized[0]:
-        case "go":
+        case "go"|"cd":
             if new_room := (move_player(game_state, tokenized[1])):
                 print(new_room)
                 return ("current_room", new_room)
             else:
                 print("Такого выхода в этой комнате нет!")
-                return ("current_room", game_state["current_room"])
+                return False,False
+            
+        case "inventory" | "e":
+            print(" ,".join(game_state["player_inventory"]))
+            return False, False
+        case "use":
+            if tokenized[1] in game_state["player_inventory"]:
+                result = ITEMS.get(tokenized[1])
+                if result not in SPESIAL_ITEMS.keys():
+                    print(result)
+                    return False, False
+            return False, False
+
+        case "take" | "tk":
+            if item := take_item(game_state,tokenized[1]):
+                if item not in game_state["player_inventory"]:
+                    ROOMS[game_state["current_room"]]["items"].remove(item)
+                    print(f"Вы подняли {item}!")
+                    return "player_inventory", item
+            else:
+                print("Такого предмета нет в этой комнате!")
+                return False, False
+        case "quit" | "q":
+            print("Выход из игры")
+            game_state['game_over'] = True
+            return False, False
+        case _:
+            print("Неизвестная команда")
+            return False, False
 def main():
     
     print("Добро пожаловать в Лабиринт сокровищ!")
@@ -28,10 +57,8 @@ def main():
         game_state["steps_taken"] += 1
 
         describe_current_room(game_state)
-        solve_puzzle(game_state)
-
         key, value = process_command(game_state,get_input(input(">>>")))
-        if key & value:
+        if key and value:
             game_state[key] = value
 
 

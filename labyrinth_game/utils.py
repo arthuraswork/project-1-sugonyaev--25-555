@@ -1,33 +1,42 @@
 from .consts import ROOMS, COLORS
-
+from math import floor
 
 def win_condition(game_state):
     if game_state["current_room"] == "treasure_room":
-        return False, "win "
+        return False, "win"
     else: 
         return False, False
+
+def attempt_open_treasure(game_state):
+    if game_state["current_room"] == "treasure_room":
+        pass
+
+
 
 def is_solved(user_input: str,answer: str) -> bool:
     return True if user_input == answer else False
 
-def solving(answer, current_room_name):
-    while True:
-        user_input = input(">s>")
+def solving(answer, current_room_name, user_input):
+    print("Ваш ввод:",user_input)
+    if user_input == "treasure_room":
         if is_solved(user_input,answer):
             ROOMS[current_room_name]['puzzle'] = list()
             print(f"{COLORS["GREEN"]}Загадка решена успешно!{COLORS["WHITE"]}")
-            break
-        else:
-            print("Ответ неверен, попробуйте еще раз")
+            return False, "win"
+    if is_solved(user_input,answer):
+        ROOMS[current_room_name]['puzzle'] = list()
+        print(f"{COLORS["GREEN"]}Загадка решена успешно!{COLORS["WHITE"]}")
+        return  False, "solved"
+    
+    print("Ответ неверен, попробуйте еще раз")
+    return False,False
 
 
-def puzzle_repr(room,current_room_name):
+def puzzle_repr(room):
     puzzle = room.get('puzzle')
     if puzzle:
-        print(f"{COLORS["RED"]}Обнаружена загадка, что пройти дальше, нужно ее решить:{COLORS["WHITE"]}")
+        print(f"{COLORS["RED"]}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS["WHITE"]}")
         print(puzzle[0])
-        solving(puzzle[1],current_room_name)
-        
     else:
         print("Загадки тут нет!")
         
@@ -51,4 +60,19 @@ def describe_current_room(game_state: dict) -> None:
     current_room_global_info = ROOMS.get(current_room_name)
     if current_room_name:
         print(room_repr(current_room_global_info, current_room_name))
-        puzzle_repr(current_room_global_info, current_room_name)
+        puzzle_repr(current_room_global_info)
+
+def pseudo_random(seed, modulo):
+    pass
+
+
+def show_help():
+    print("\nДоступные команды:")
+    print("  go <direction>  - перейти в направлении (north/south/east/west)")
+    print("  look            - осмотреть текущую комнату")
+    print("  take <item>     - поднять предмет")
+    print("  use <item>      - использовать предмет из инвентаря")
+    print("  inventory       - показать инвентарь")
+    print("  solve           - попытаться решить загадку в комнате")
+    print("  quit            - выйти из игры")
+    print("  help            - показать это сообщение")

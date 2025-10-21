@@ -4,15 +4,16 @@ from .utils import *
 
 
 game_state = {
-    'player_inventory': list(),     # Инвентарь игрока
+    'player_inventory': list(), # Инвентарь игрока
     'current_room': 'entrance', # Текущая комната
     'game_over': False,         # Значения окончания игры
     'steps_taken': 0,           # Количество шагов
     'score': 0,
+    'hp': 3
 }
 
-
 def process_command(game_state: dict, cmd: str):
+    """командный интерпретатор - команды по форме [ключевое слово](аргументы)"""
     tokenized = cmd.split()
     match tokenized[0]:
         case "tp":
@@ -69,7 +70,9 @@ def process_command(game_state: dict, cmd: str):
         case _:
             print(f"{COLORS["RED"]}Неизвестная команда{COLORS["WHITE"]}\nДля справки `help`")
     return False, False
+
 def post_processing(key,value):
+    """Обработка результатов командного интерпретатора"""
     if key and value:
         if key == "player_inventory":
             game_state[key].append(value)
@@ -84,10 +87,15 @@ def post_processing(key,value):
         if value == 'solved':
             game_state["score"] += 5
 
+
+
 def main():
+    """Главный цикл"""
     print("Добро пожаловать в Лабиринт сокровищ!")
     while (not game_state["game_over"]):
         describe_current_room(game_state)
+        if pseudo_random(game_state["steps_taken"]) == 1:
+            random_event(pseudo_random(game_state["steps_taken"]),game_state)
         key, value = process_command(game_state,get_input(input(">>>")))
         post_processing(key,value)
         

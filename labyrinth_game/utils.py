@@ -1,7 +1,18 @@
 from .consts import ROOMS, COLORS
-from math import floor
+from math import floor, sin
+
+def random_event(num: int, game_state: dict):
+    """мэтчинг событий по числу"""
+    match num:
+        case 0:
+            
+        case 1:
+            ...
+        case 2:
+            ...
 
 def win_condition(game_state):
+    """Проверка условия победы"""
     if game_state["current_room"] == "treasure_room":
         return False, "win"
     else: 
@@ -11,12 +22,11 @@ def attempt_open_treasure(game_state):
     if game_state["current_room"] == "treasure_room":
         pass
 
-
-
 def is_solved(user_input: str,answer: str) -> bool:
     return True if user_input == answer else False
 
 def solving(answer, current_room_name, user_input):
+    """решение загадок"""
     print("Ваш ввод:",user_input)
     if user_input == "treasure_room":
         if is_solved(user_input,answer):
@@ -33,6 +43,7 @@ def solving(answer, current_room_name, user_input):
 
 
 def puzzle_repr(room):
+    """показывает загадку в терминале при наличии"""
     puzzle = room.get('puzzle')
     if puzzle:
         print(f"{COLORS["RED"]}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS["WHITE"]}")
@@ -42,12 +53,15 @@ def puzzle_repr(room):
         
 
 def exits_repr(room: dict):
+    """Показывает выходы"""
     return ", ".join([f"на {k} в {v}" for k,v in room["exits"].items()])
 
 def items_repr(room: dict):
+    """Показывает предметы в комнате"""
     return ", ".join([f"{i}" for i in room['items']]) if room['items'] else "не обнаружены"
 
 def room_repr(room: dict, name: str) -> str:
+    """Описывает помещение"""
     return f"""
 Вы в помещении {COLORS["GREEN"]}{name}{COLORS["WHITE"]}
 > Выходы:      
@@ -56,17 +70,25 @@ def room_repr(room: dict, name: str) -> str:
     {items_repr(room)}"""
 
 def describe_current_room(game_state: dict) -> None:
+    """Вывод информации о комнате в консоль"""
     current_room_name = game_state.get('current_room')
     current_room_global_info = ROOMS.get(current_room_name)
     if current_room_name:
         print(room_repr(current_room_global_info, current_room_name))
         puzzle_repr(current_room_global_info)
 
-def pseudo_random(seed, modulo):
-    pass
+def pseudo_random(seed, modulo=3):
+    """Генератор рандома"""
+    real_digit = 12.9898
+    long_digit = 42123.234509
+    sin_val = sin(real_digit * seed) * long_digit
+    int_part= sin_val - floor(sin_val) 
+    return floor(int_part * modulo)
+
 
 
 def show_help():
+    """вывод списка команды"""
     print("\nДоступные команды:")
     print("  go <direction>  - перейти в направлении (north/south/east/west)")
     print("  look            - осмотреть текущую комнату")

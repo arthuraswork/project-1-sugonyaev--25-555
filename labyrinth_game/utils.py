@@ -5,18 +5,21 @@ def random_event(num: int, game_state: dict):
     """мэтчинг событий по числу"""
     match num:
         case 0:
-            
-        case 1:
             ...
         case 2:
             ...
+        case 4:
+            ...
+def rusty_key_checker(game_state):
+    if "rusty_key" in game_state["player_inventory"]:
+        return True
+    
 
 def win_condition(game_state):
     """Проверка условия победы"""
     if game_state["current_room"] == "treasure_room":
         return False, "win"
-    else: 
-        return False, False
+    return False, False
 
 def attempt_open_treasure(game_state):
     if game_state["current_room"] == "treasure_room":
@@ -28,7 +31,7 @@ def is_solved(user_input: str,answer: str) -> bool:
 def solving(answer, current_room_name, user_input):
     """решение загадок"""
     print("Ваш ввод:",user_input)
-    if user_input == "treasure_room":
+    if current_room_name == "treasure_room":
         if is_solved(user_input,answer):
             ROOMS[current_room_name]['puzzle'] = list()
             print(f"{COLORS["GREEN"]}Загадка решена успешно!{COLORS["WHITE"]}")

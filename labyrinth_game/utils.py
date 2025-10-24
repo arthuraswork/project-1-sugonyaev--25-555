@@ -1,60 +1,59 @@
-from .consts import ROOMS, COLORS
+from .consts import ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT
 from math import floor, sin
 
-def random_event(num: int, game_state: dict):
+def event(num: int, game_state: dict):
     """мэтчинг событий по числу"""
     match num:
         case 0:
+            print("Вы нашли монетку")
+            return "",
+        case 1:
             ...
         case 2:
             ...
-        case 4:
-            ...
-def rusty_key_checker(game_state):
-    if "rusty_key" in game_state["player_inventory"]:
-        return True
-    
+
+def rusty_key_checker(game_state) -> bool|None:
+    return "rusty_key" in game_state["player_inventory"]
+            
 
 def win_condition(game_state):
     """Проверка условия победы"""
-    if game_state["current_room"] == "treasure_room":
-        return False, "win"
+    if (game_state["current_room"] == "treasure_room" and 
+        "treasure_key" in game_state["player_inventory"]):
+        return False, "win" 
     return False, False
 
-def attempt_open_treasure(game_state):
-    if game_state["current_room"] == "treasure_room":
-        pass
+def attempt_open_treasure(answer,user_input):
+    if is_solved(user_input, answer):
+        ROOMS["treasure_room"]['puzzle'] = list()
+        print(f"{COLORS['GREEN']}Загадка решена успешно!{COLORS['WHITE']}")  
+        return False, "win"
 
 def is_solved(user_input: str,answer: str) -> bool:
     return True if user_input == answer else False
 
 def solving(answer, current_room_name, user_input):
     """решение загадок"""
-    print("Ваш ввод:",user_input)
+    print("Ваш ввод:", user_input)
     if current_room_name == "treasure_room":
-        if is_solved(user_input,answer):
-            ROOMS[current_room_name]['puzzle'] = list()
-            print(f"{COLORS["GREEN"]}Загадка решена успешно!{COLORS["WHITE"]}")
-            return False, "win"
-    if is_solved(user_input,answer):
+        return attempt_open_treasure(answer,user_input)
+    if is_solved(user_input, answer):
         ROOMS[current_room_name]['puzzle'] = list()
-        print(f"{COLORS["GREEN"]}Загадка решена успешно!{COLORS["WHITE"]}")
-        return  False, "solved"
+        print(f"{COLORS['GREEN']}Загадка решена успешно!{COLORS['WHITE']}") 
+        return False, "solved"
     
     print("Ответ неверен, попробуйте еще раз")
-    return False,False
-
+    return False, False
 
 def puzzle_repr(room):
     """показывает загадку в терминале при наличии"""
     puzzle = room.get('puzzle')
     if puzzle:
-        print(f"{COLORS["RED"]}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS["WHITE"]}")
-        print(puzzle[0])
+        print(f"{COLORS['RED']}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS['WHITE']}")
+        print(puzzle)
     else:
         print("Загадки тут нет!")
         
-
 def exits_repr(room: dict):
     """Показывает выходы"""
     return ", ".join([f"на {k} в {v}" for k,v in room["exits"].items()])
@@ -82,9 +81,7 @@ def describe_current_room(game_state: dict) -> None:
 
 def pseudo_random(seed, modulo=3):
     """Генератор рандома"""
-    real_digit = 12.9898
-    long_digit = 42123.234509
-    sin_val = sin(real_digit * seed) * long_digit
+    sin_val = sin(REAL_DIGIT * seed) * LONG_DIGIT
     int_part= sin_val - floor(sin_val) 
     return floor(int_part * modulo)
 
@@ -94,10 +91,10 @@ def show_help():
     """вывод списка команды"""
     print("\nДоступные команды:")
     print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look            - осмотреть текущую комнату")
+    print("  look | ls       - осмотреть текущую комнату")
     print("  take <item>     - поднять предмет")
-    print("  use <item>      - использовать предмет из инвентаря")
-    print("  inventory       - показать инвентарь")
-    print("  solve           - попытаться решить загадку в комнате")
-    print("  quit            - выйти из игры")
+    print("  use <item> | f  - использовать предмет из инвентаря")
+    print("  inventory | i   - показать инвентарь")
+    print("  solve | s       - попытаться решить загадку в комнате")
+    print("  quit | q        - выйти из игры")
     print("  help            - показать это сообщение")

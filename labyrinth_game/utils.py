@@ -1,18 +1,21 @@
-from .consts import ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT
+from .consts import (
+    ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT, COMMANDS, MAX_CMD_LENGTH
+)
 from math import floor, sin
 
-def event(num: int, game_state: dict):
-    """мэтчинг событий по числу"""
+def random_event(num: int, game_state: dict):
+    """Мэтчинг событий по числу"""
     match num:
         case 0:
             print("Вы нашли монетку")
-            return "",
+            return ""
         case 1:
             ...
         case 2:
             ...
 
 def rusty_key_checker(game_state) -> bool|None:
+    """Проверка ключа для treasure_room"""
     return "rusty_key" in game_state["player_inventory"]
             
 
@@ -50,7 +53,7 @@ def puzzle_repr(room):
     puzzle = room.get('puzzle')
     if puzzle:
         print(f"{COLORS['RED']}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS['WHITE']}")
-        print(puzzle)
+        print(puzzle[0])
     else:
         print("Загадки тут нет!")
         
@@ -88,13 +91,9 @@ def pseudo_random(seed, modulo=3):
 
 
 def show_help():
-    """вывод списка команды"""
-    print("\nДоступные команды:")
-    print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look | ls       - осмотреть текущую комнату")
-    print("  take <item>     - поднять предмет")
-    print("  use <item> | f  - использовать предмет из инвентаря")
-    print("  inventory | i   - показать инвентарь")
-    print("  solve | s       - попытаться решить загадку в комнате")
-    print("  quit | q        - выйти из игры")
-    print("  help            - показать это сообщение")
+    print(f"\n{COLORS['GREEN']}Команды:{COLORS['WHITE']}\n")
+    commands: list = list()
+    for cmd, descr in COMMANDS.items():
+        commands.append(f"{cmd} {' ' * (MAX_CMD_LENGTH - len(cmd))} {descr}")
+    joined = ";\n".join(commands)
+    print(joined)

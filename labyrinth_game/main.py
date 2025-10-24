@@ -1,4 +1,4 @@
-from .consts import ROOMS, ITEMS, COLORS
+from .consts import ROOMS, COLORS
 from .player_actions import (
                             get_input, move_player, 
                             take_item, show_inventory, 
@@ -92,7 +92,7 @@ def process_command(game_state: dict, cmd: str):
             
     return False, False
 
-def defeat():
+def defeat() -> None:
     print("Вы умерли :(\nВозможно кому то повезет больше")
 
 def apply_command_result(key, value):
@@ -136,7 +136,7 @@ def main():
         
         if pseudo_random(game_state["steps_taken"]) == 1:
             event_result = random_event(pseudo_random(game_state["steps_taken"]), game_state)
-
+            
         key, value = process_command(game_state, get_input(input(">>> ")))
         apply_command_result(key, value)
         

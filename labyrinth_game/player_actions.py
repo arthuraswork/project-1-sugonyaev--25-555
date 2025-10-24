@@ -23,13 +23,14 @@ def move_player(game_state: dict, direction) -> str|None:
     current_room = game_state['current_room']
     new_room = ROOMS[current_room]["exits"].get(direction)
     if new_room:
-        if new_room == "treasure_room" and not rusty_key_checker(game_state):
-            return "noRustyKey"
-        else: 
-            print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ")
+        if new_room == "treasure_room":
+            if not rusty_key_checker(game_state):
+                return "noRustyKey"
+            else: 
+                print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ")
         return new_room  
 
-def use_item(game_state: dict, item_name: str, complited: bool = False):
+def use_item(game_state: dict, item_name: str):
     """Использование предмета в инвентаре"""
     item = item_name.lower()
     if item in game_state["player_inventory"]:

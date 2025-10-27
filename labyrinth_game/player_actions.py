@@ -1,5 +1,5 @@
 from .consts import ROOMS, COLORS, ITEMS
-from .utils import rusty_key_checker,win_condition, pseudo_random, random_event
+from .utils import rusty_key_checker,win_condition
 
 def move_player(game_state: dict, direction) -> str|None:
     """Проверяет наличие выхода и возвращает новую комнату"""

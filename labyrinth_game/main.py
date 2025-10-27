@@ -5,7 +5,9 @@ from .player_actions import (
                             use_item,
                             random_event
                              )
-from .utils import *
+from .utils import (
+    pseudo_random, apply_event_results, show_help, describe_current_room, solving 
+    )
 
 game_state = {
         'player_inventory': [],

@@ -113,7 +113,7 @@ def trigger_trap(game_state: dict) -> str|None:
             if pseudo_random(game_state["steps_taken"]) in TRAP_TRIGGER_RANGE:
                 damage = pseudo_random(game_state["steps_taken"], MAX_RANGE)
                 if damage >= DEATH_RANGE:
-                    print(f"Сработала ловушка и вы получили ранение!")
+                    print("Сработала ловушка и вы получили ранение!")
                     return "defeat"
                 print("Вы смогли увернуться!")
         else:

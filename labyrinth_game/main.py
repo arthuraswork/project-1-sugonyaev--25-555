@@ -1,13 +1,21 @@
-from .consts import ROOMS, COLORS
+#!/usr/bin/env python3
+
+from .consts import COLORS, ROOMS, EVENT_WORKING_NUM
 from .player_actions import (
-                            get_input, move_player, 
-                            take_item, show_inventory, 
-                            use_item,
-                            random_event
-                             )
+    get_input,
+    move_player,
+    show_inventory,
+    take_item,
+    use_item,
+)
 from .utils import (
-    pseudo_random, apply_event_results, show_help, describe_current_room, solving 
-    )
+    apply_event_results,
+    describe_current_room,
+    pseudo_random,
+    show_help,
+    solving,
+    random_event
+)
 
 game_state = {
         'player_inventory': [],
@@ -57,7 +65,10 @@ def process_command(game_state: dict, cmd: str):
             puzzle = ROOMS[game_state["current_room"]].get("puzzle")
             if puzzle:
                 print(puzzle[0])
-                return solving(puzzle[1], game_state["current_room"], " ".join(tokenized[1:]))
+                return solving(
+                    puzzle[1], game_state["current_room"], 
+                               " ".join(tokenized[1:])
+                               )
             
         case "north"|"south"|"east"|"west"|"go":
             if command == "go":
@@ -134,8 +145,12 @@ def main():
         key, value = process_command(game_state, cmd)
         apply_command_result(key, value)
         if cmd_type(cmd) == "go":
-            if pseudo_random(game_state["steps_taken"]) in [0,1]:
-                event_result = random_event(pseudo_random(game_state["steps_taken"]), game_state)
+            if pseudo_random(game_state["steps_taken"]) == EVENT_WORKING_NUM:
+                event_result = random_event(
+                    pseudo_random(
+                        game_state["steps_taken"]
+                        ), game_state)
+                
                 if apply_event_results(event_result,game_state) == "defeat":
                     break
 

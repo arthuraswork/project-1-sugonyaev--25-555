@@ -1,7 +1,17 @@
-from .consts import (
-    ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT, COMMANDS, MAX_CMD_LENGTH, TRAP_TRIGGER_RANGE,MAX_RANGE,DEATH_RANGE
-)
 from math import floor, sin
+
+from .consts import (
+    COLORS,
+    COMMANDS,
+    DEATH_RANGE,
+    LONG_DIGIT,
+    MAX_CMD_LENGTH,
+    MAX_RANGE,
+    REAL_DIGIT,
+    ROOMS,
+    TRAP_TRIGGER_RANGE,
+)
+
 
 def random_event(num: int, game_state: dict):
     """Мэтчинг событий по числу"""
@@ -66,7 +76,11 @@ def puzzle_repr(room):
     """Показывает загадку в терминале при наличии"""
     puzzle = room.get('puzzle')
     if puzzle:
-        print(f"{COLORS['RED']}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS['WHITE']}")
+        print(
+            f"""{COLORS['RED']}
+Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:
+            {COLORS['WHITE']}"""
+            )
         print(puzzle[0])
     else:
         print("Загадки тут нет!")
@@ -77,7 +91,7 @@ def exits_repr(room: dict):
 
 def items_repr(room: dict):
     """Показывает предметы в комнате"""
-    return ", ".join([f"{i}" for i in room['items']]) if room['items'] else "не обнаружены"
+    return ", ".join([f"{i}" for i in room['items']]) if room['items'] else "ничего нет"
 
 def room_repr(room: dict, name: str) -> str:
     """Описывает помещение"""

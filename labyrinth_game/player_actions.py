@@ -1,5 +1,6 @@
-from .consts import ROOMS, COLORS, ITEMS
-from .utils import rusty_key_checker,win_condition
+from .consts import COLORS, ITEMS, ROOMS
+from .utils import rusty_key_checker, win_condition
+
 
 def move_player(game_state: dict, direction) -> str|None:
     """Проверяет наличие выхода и возвращает новую комнату"""
@@ -10,7 +11,10 @@ def move_player(game_state: dict, direction) -> str|None:
             if not rusty_key_checker(game_state):
                 return "TreasureNoRustyKey"
             else: 
-                print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ")
+                print(
+                    """Вы используете найденный ключ, 
+                    чтобы открыть путь в комнату сокровищ"""
+                      )
         return new_room  
 
 def use_item(game_state: dict, item_name: str):
@@ -20,10 +24,10 @@ def use_item(game_state: dict, item_name: str):
         result = ITEMS.get(item)
         if result:
             print(result)
-        elif item == "bronze_box":
-            return "unboxing", "rusty_key"
-        elif item == "treasure_key":
-            return win_condition(game_state)
+            if item == "bronze_box":
+                return "unboxing", "rusty_key"
+            if item == "treasure_key":
+                return win_condition(game_state)
         else:
             print("Неизвестно, как использовать этот предмет")
     else:
@@ -33,7 +37,9 @@ def use_item(game_state: dict, item_name: str):
 
 def show_inventory(game_state: dict) -> None:
     """Показывает инвентарь"""
-    inventory_items = ", ".join(game_state["player_inventory"]) if game_state["player_inventory"] else "пусто"
+    inventory_items = ", ".join(
+        game_state["player_inventory"]
+        ) if game_state["player_inventory"] else "пусто"
     print(f"{COLORS['BLUE']}Инвентарь: {inventory_items}{COLORS['WHITE']}")
 
 def take_item(game_state: dict, item_name: str) -> str|None:
@@ -49,4 +55,4 @@ def get_input(prompt: str) -> str:
         return prompt if prompt.strip() != "" else "null"
     except (KeyboardInterrupt, EOFError):
         print("\nВыход из игры.")
-        return "quit" 
+        return "quit"

@@ -35,12 +35,14 @@ def win_condition(game_state):
     return False, False
 
 def attempt_open_treasure(answer,user_input):
+    """Реализует опцию решения загадки в сокровищнице"""
     if is_solved(user_input, answer):
         ROOMS["treasure_room"]['puzzle'] = list()
         print(f"{COLORS['GREEN']}Загадка решена успешно!{COLORS['WHITE']}")  
         return False, "win"
 
 def is_solved(user_input: str,answer: str) -> bool:
+    """Проверяет верно ли решение игрока"""
     if "|" in answer:
         variants = answer.split("|")
         if user_input in variants:
@@ -48,7 +50,7 @@ def is_solved(user_input: str,answer: str) -> bool:
     return True if user_input == answer else False
 
 def solving(answer, current_room_name, user_input):
-    """решение загадок"""
+    """Решение загадок"""
     print("Ваш ввод:", user_input)
     if current_room_name == "treasure_room":
         return attempt_open_treasure(answer,user_input)
@@ -61,7 +63,7 @@ def solving(answer, current_room_name, user_input):
     return False, False
 
 def puzzle_repr(room):
-    """показывает загадку в терминале при наличии"""
+    """Показывает загадку в терминале при наличии"""
     puzzle = room.get('puzzle')
     if puzzle:
         print(f"{COLORS['RED']}Обнаружена загадка! Чтобы дать ответ, напишите `solve ответ`:{COLORS['WHITE']}")
@@ -101,6 +103,7 @@ def pseudo_random(seed, modulo=3):
     return floor(int_part * modulo)
 
 def apply_event_results(result,game_state):
+    """Применяет результаты ивента"""
     match result:
         case "coin":
             ROOMS[game_state["current_room"]]["items"].append(result)
@@ -124,6 +127,7 @@ def trigger_trap(game_state: dict) -> str|None:
     return None
 
 def show_help():
+    """Вывод команд"""
     print(f"\n{COLORS['GREEN']}Команды:{COLORS['WHITE']}\n")
     commands: list = list()
     for cmd, descr in COMMANDS.items():

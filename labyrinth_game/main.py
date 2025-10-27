@@ -119,6 +119,7 @@ def apply_command_result(key, value):
             print(f"{COLORS['GREEN']}Загадка решена! +5 очков{COLORS['WHITE']}")
 
 def cmd_type(cmd):
+    """Определяет тип команды и если go->вызывается ивент """
     tokenized = cmd.split()
     if tokenized[0] in ["north","south","east","west","go"]:
         return "go"

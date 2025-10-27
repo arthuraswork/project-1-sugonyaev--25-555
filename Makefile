@@ -1,4 +1,4 @@
-st:
+run:
 	poetry install
 	poetry build
 	poetry run project

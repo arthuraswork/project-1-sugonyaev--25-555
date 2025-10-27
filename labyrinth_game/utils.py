@@ -1,5 +1,5 @@
 from .consts import (
-    ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT, COMMANDS, MAX_CMD_LENGTH
+    ROOMS, COLORS, REAL_DIGIT, LONG_DIGIT, COMMANDS, MAX_CMD_LENGTH, TRAP_TRIGGER_RANGE,MAX_RANGE,DEATH_RANGE
 )
 from math import floor, sin
 
@@ -7,12 +7,20 @@ def random_event(num: int, game_state: dict):
     """Мэтчинг событий по числу"""
     match num:
         case 0:
-            print("Вы нашли монетку")
-            return ""
+            print("Вы нашли монетку!")
+            return "coin"
         case 1:
-            ...
+            print("Вы слышите шорох")
+            if "sword" in game_state["player_inventory"]:
+                print("Вы отпугнули существо")
+            return "sound"
         case 2:
-            ...
+            if game_state["current_room"] == "trap_room":
+                result = trigger_trap(game_state)
+                if result:
+                    game_state["game_over"] = True                
+                    return "defeat"
+
 
 def rusty_key_checker(game_state) -> bool|None:
     """Проверка ключа для treasure_room"""
@@ -33,6 +41,10 @@ def attempt_open_treasure(answer,user_input):
         return False, "win"
 
 def is_solved(user_input: str,answer: str) -> bool:
+    if "|" in answer:
+        variants = answer.split("|")
+        if user_input in variants:
+            return True
     return True if user_input == answer else False
 
 def solving(answer, current_room_name, user_input):
@@ -88,12 +100,33 @@ def pseudo_random(seed, modulo=3):
     int_part= sin_val - floor(sin_val) 
     return floor(int_part * modulo)
 
-
+def apply_event_results(result,game_state):
+    match result:
+        case "coin":
+            ROOMS[game_state["current_room"]]["items"].append(result)
+            
+def trigger_trap(game_state: dict) -> str|None:
+    """Активирует ловушку в trap_room:"""
+    if "torch" not in game_state["player_inventory"]:
+        print("Ловушка активирована! Пол стал дрожать...")
+        if not game_state["player_inventory"]:
+            if pseudo_random(game_state["steps_taken"]) in TRAP_TRIGGER_RANGE:
+                damage = pseudo_random(game_state["steps_taken"], MAX_RANGE)
+                if damage >= DEATH_RANGE:
+                    print(f"Сработала ловушка и вы получили ранение!")
+                    return "defeat"
+                print("Вы смогли увернуться!")
+        else:
+            lost_item = game_state["player_inventory"].pop()
+            print(f"Сработала ловушка и вы потерялb {lost_item}")
+    else:
+        print("Вы вовремя заметили ловушку и обошли ее!")
+    return None
 
 def show_help():
     print(f"\n{COLORS['GREEN']}Команды:{COLORS['WHITE']}\n")
     commands: list = list()
     for cmd, descr in COMMANDS.items():
-        commands.append(f"{cmd} {' ' * (MAX_CMD_LENGTH - len(cmd))} {descr}")
+        commands.append(f"{cmd}: {'.' * (MAX_CMD_LENGTH - len(cmd))} {descr}")
     joined = ";\n".join(commands)
     print(joined)

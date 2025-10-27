@@ -1,22 +1,5 @@
 from .consts import ROOMS, COLORS, ITEMS
-from .utils import  pseudo_random, random_event, rusty_key_checker,win_condition
-
-def trigger_trap(game_state: dict) -> int|None:
-    """Активирует ловушку в trap_room:"""
-    if "torch" not in game_state["player_inventory"]:
-        if not game_state["player_inventory"]:
-            if pseudo_random(game_state["steps_taken"]) in [1,2]:
-                damage = pseudo_random(game_state["steps_taken"], 9)
-                if damage >= 5:
-                    print(f"Сработала ловушка и вы получили ранение!")
-                    return True
-                print("Вы смогли увернуться!")
-        else:
-            lost_item = game_state["player_inventory"].pop()
-            print(f"Сработала ловушка и вы потерялb {lost_item}")
-    else:
-        print("Вы вовремя заметили ловушку и обошли ее!")
-    return None
+from .utils import rusty_key_checker,win_condition, pseudo_random, random_event
 
 def move_player(game_state: dict, direction) -> str|None:
     """Проверяет наличие выхода и возвращает новую комнату"""
@@ -25,7 +8,7 @@ def move_player(game_state: dict, direction) -> str|None:
     if new_room:
         if new_room == "treasure_room":
             if not rusty_key_checker(game_state):
-                return "noRustyKey"
+                return "TreasureNoRustyKey"
             else: 
                 print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ")
         return new_room  

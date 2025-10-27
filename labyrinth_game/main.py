@@ -2,7 +2,7 @@ from .consts import ROOMS, COLORS
 from .player_actions import (
                             get_input, move_player, 
                             take_item, show_inventory, 
-                            use_item, trigger_trap,
+                            use_item,
                             random_event
                              )
 from .utils import *
@@ -18,7 +18,7 @@ game_state = {
 def on_go_command(game_state: dict,direction: str):
     """Обработка команды перехода в другую комнату"""
     new_room = move_player(game_state, direction)
-    if new_room and new_room != "noRustyKey":
+    if new_room and new_room != "TreasureNoRustyKey":
         game_state["steps_taken"] += 1
         return "current_room", new_room
     else:
@@ -92,9 +92,6 @@ def process_command(game_state: dict, cmd: str):
             
     return False, False
 
-def defeat() -> None:
-    print("Вы умерли :(\nВозможно кому то повезет больше")
-
 def apply_command_result(key, value):
     """Обработка результатов командного интерпретатора"""
     if key and value:
@@ -119,26 +116,25 @@ def apply_command_result(key, value):
             game_state["score"] += 5
             print(f"{COLORS['GREEN']}Загадка решена! +5 очков{COLORS['WHITE']}")
 
-
+def cmd_type(cmd):
+    tokenized = cmd.split()
+    if tokenized[0] in ["north","south","east","west","go"]:
+        return "go"
+    return "other"
 
 def main():
     """Главный цикл"""
     print("Добро пожаловать в Лабиринт сокровищ!")
     show_help()
-    while not game_state["game_over"]:
-
-        if game_state["current_room"] == "trap_room":
-            result = trigger_trap(game_state)
-            if result:
-                game_state["game_over"] = True                
-                defeat()
-                break
-        
-        if pseudo_random(game_state["steps_taken"]) == 1:
-            event_result = random_event(pseudo_random(game_state["steps_taken"]), game_state)
-            
-        key, value = process_command(game_state, get_input(input(">>> ")))
+    while not game_state["game_over"]:    
+        cmd = get_input(input(">>> "))
+        key, value = process_command(game_state, cmd)
         apply_command_result(key, value)
-        
+        if cmd_type(cmd) == "go":
+            if pseudo_random(game_state["steps_taken"]) in [0,1]:
+                event_result = random_event(pseudo_random(game_state["steps_taken"]), game_state)
+                if apply_event_results(event_result,game_state) == "defeat":
+                    break
+
 if __name__ == "__main__":
     main()

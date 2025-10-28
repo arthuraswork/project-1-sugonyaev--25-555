@@ -1,6 +1,6 @@
 # 🏰 Лабиринт Сокровищ
 
-Текстовая приключенческая игра в жанре квеста, где игрок исследует лабиринт, собирает предметы, решает головоломки и ищет сокровище.
+Текстовая приключенческая игра в жанре квеста, где игрок исследует лабиринт, собирает предметы, решает головоломки и ищет сокровище
 
 ## 🎮 Особенности
 
@@ -13,7 +13,7 @@
 
 ## 🎯 Цель игры
 
-Найти ключ от сокровищницы.
+Найти ключ от сокровищницы и открыть сундук
 
 ## ⌨️ Команды управления
 
@@ -45,13 +45,9 @@
 
 ```bash
 git clone https://github.com/arthuraswork/project-1-sugonyaev--25-555
-
 cd project-1-sugonyaev--25-555
-
-python3 main.py
-#или 
-make run
-
+poetry install
+poetry run python -m labyrinth_game.main
 ```
 
 [![asciicast](https://asciinema.org/a/K2gw48yGgbcGt3SQitAJx0pnE.svg)](https://asciinema.org/a/K2gw48yGgbcGt3SQitAJx0pnE)

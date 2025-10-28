@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from .consts import COLORS, ROOMS, EVENT_WORKING_NUM
+from .consts import COLORS, EVENT_WORKING_NUM, ROOMS
 from .player_actions import (
     get_input,
     move_player,
@@ -12,9 +12,9 @@ from .utils import (
     apply_event_results,
     describe_current_room,
     pseudo_random,
+    random_event,
     show_help,
     solving,
-    random_event
 )
 
 game_state = {

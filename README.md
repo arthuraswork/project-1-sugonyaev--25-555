@@ -44,10 +44,14 @@
 ## 🏃‍♂️ Запуск игры
 
 ```bash
-# Клонируйте репозиторий
 git clone https://github.com/arthuraswork/project-1-sugonyaev--25-555
+
 cd project-1-sugonyaev--25-555
+
 python3 main.py
+#или 
+make run
+
 ```
 
-[![asciicast](https://asciinema.org/a/6cc5aeca-ccd2-430d-8bbf-aa93c3497a1e.svg)](https://asciinema.org/a/6cc5aeca-ccd2-430d-8bbf-aa93c3497a1e)
+[![asciicast](https://asciinema.org/a/kzpQ9ULtimqkNdPZyGHS2Z0QO.svg)](https://asciinema.org/a/kzpQ9ULtimqkNdPZyGHS2Z0QO)

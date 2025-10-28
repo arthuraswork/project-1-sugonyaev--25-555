@@ -92,7 +92,7 @@ def process_command(game_state: dict, cmd: str):
                 return on_take_command(game_state, tokenized[1])
             else:
                 print("Укажите предмет для взятия")
-        case "quit" | "q" | "c":
+        case "quit" | "q":
             print("Выход из игры")
             game_state['game_over'] = True
 

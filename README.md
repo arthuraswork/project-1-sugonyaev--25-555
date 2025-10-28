@@ -54,4 +54,5 @@ make run
 
 ```
 
-[![asciicast](https://asciinema.org/a/kzpQ9ULtimqkNdPZyGHS2Z0QO.svg)](https://asciinema.org/a/kzpQ9ULtimqkNdPZyGHS2Z0QO)
+[![asciicast](https://asciinema.org/a/K2gw48yGgbcGt3SQitAJx0pnE.svg)](https://asciinema.org/a/K2gw48yGgbcGt3SQitAJx0pnE)
+

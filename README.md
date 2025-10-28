@@ -47,9 +47,7 @@
 # Клонируйте репозиторий
 git clone https://github.com/arthuraswork/project-1-sugonyaev--25-555
 cd project-1-sugonyaev--25-555
-
-# Запустите главный файл
 python3 main.py
-#
 ```
+
 [![asciicast](https://asciinema.org/a/6cc5aeca-ccd2-430d-8bbf-aa93c3497a1e.svg)](https://asciinema.org/a/6cc5aeca-ccd2-430d-8bbf-aa93c3497a1e)
